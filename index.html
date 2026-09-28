@@ -4,602 +4,55 @@
   <base target="_top">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Clientes Novos Mesa Digital - CRM</title>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <title>CRMesa Digital</title>
   <style>
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
 
-  /* ═══════════════════════════════════════════════════════════
-     VARIÁVEIS E PALETA DE CORES (W1 Direct)
-     ═══════════════════════════════════════════════════════════ */
   :root {
     color-scheme: light;
-    --primary: #3e6a6d;
-    --primary-dark: #022028;
-    --primary-light: #5fded4;
-    --success: #2f7d6a;
-    --warning: #a8752a;
-    --danger: #b3564e;
-    --gray-50: #ebf0f0;
-    --gray-100: #e2e8e8;
-    --gray-200: #d3e0df;
-    --gray-300: #afcecd;
-    --gray-500: #6d9899;
-    --gray-700: #3e6a6d;
-    --gray-900: #022028;
-    --surface: #ffffff;
-    --border: rgba(2, 32, 40, 0.14);
-    --azul: var(--primary);
-    --verde: var(--success);
-    --fundo: var(--gray-50);
-    --card: var(--surface);
-    --texto: var(--primary-dark);
-    --borda: var(--border);
+    --primary: #3e6a6d; --primary-dark: #022028; --primary-light: #5fded4;
+    --success: #2f7d6a; --warning: #a8752a; --danger: #b3564e;
+    --gray-50: #ebf0f0; --gray-100: #e2e8e8; --gray-200: #d3e0df;
+    --gray-300: #afcecd; --gray-500: #6d9899; --gray-700: #3e6a6d; --gray-900: #022028;
+    --surface: #ffffff; --border: rgba(2, 32, 40, 0.14);
   }
 
   :root[data-theme="dark"] {
     color-scheme: dark;
-    --primary: #5fded4;
-    --primary-dark: #1f4148;
-    --primary-light: #84afaf;
-    --success: #5fded4;
-    --warning: #e0d3a8;
-    --danger: #e8a09a;
-    --gray-50: #022028;
-    --gray-100: #0a181c;
-    --gray-200: #1f4148;
-    --gray-300: #3e6a6d;
-    --gray-500: #6d9899;
-    --gray-700: #84afaf;
-    --gray-900: #ffffff;
-    --surface: #0a181c;
-    --border: #1f4148;
+    --primary: #5fded4; --primary-dark: #1f4148; --primary-light: #84afaf;
+    --success: #5fded4; --warning: #e0d3a8; --danger: #e8a09a;
+    --gray-50: #022028; --gray-100: #0a181c; --gray-200: #1f4148;
+    --gray-300: #3e6a6d; --gray-500: #6d9899; --gray-700: #84afaf; --gray-900: #ffffff;
+    --surface: #0a181c; --border: #1f4148;
   }
 
-  body {
-    font-family: 'Public Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background: var(--gray-50);
-    color: var(--gray-900);
-    line-height: 1.5;
-    padding: 20px;
-    transition: background 0.18s ease, color 0.18s ease;
-  }
+  body { font-family: 'Public Sans', -apple-system, BlinkMacSystemFont, sans-serif; background: var(--gray-50); color: var(--gray-900); line-height: 1.5; padding: 20px; }
+  .container { max-width: 1180px; margin: 0 auto; }
 
-  .container { 
-    max-width: 1180px; 
-    margin: 0 auto; 
-    padding: 0;
-  }
+  .theme-btn { background: var(--gray-200); border: 1px solid var(--border); color: var(--gray-900); border-radius: 20px; padding: 6px 14px; font-size: 12px; cursor: pointer; }
+  .login-box { background: var(--surface); padding: 40px; border-radius: 12px; border: 1px solid var(--border); max-width: 400px; margin: 60px auto; text-align: center; }
+  .login-toggle { display: flex; gap: 6px; background: var(--gray-200); padding: 4px; border-radius: 8px; margin-bottom: 16px; }
+  .login-toggle button { flex: 1; padding: 8px; border: none; background: transparent; cursor: pointer; border-radius: 6px; }
+  .login-toggle button.login-btn-ativo { background: var(--primary-dark); color: #fff; }
 
-  .screen { min-height: 100vh; }
-
-  /* BOTÃO DE TEMA */
-  .theme-btn {
-    background: var(--gray-200);
-    border: 1px solid var(--border);
-    color: var(--gray-900);
-    border-radius: 20px;
-    padding: 6px 14px;
-    font-size: 12px;
-    font-weight: 500;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    transition: all 0.15s ease;
-    white-space: nowrap;
-    width: auto;
-    margin-top: 0;
-  }
-
-  .theme-btn:hover {
-    border-color: var(--primary);
-    background: var(--surface);
-  }
-
-  /* LOGIN */
-  #loginScreen, .login-box-wrapper {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 100vh;
-  }
-
-  .login-box {
-    background: var(--surface);
-    padding: 40px;
-    border-radius: 12px;
-    border: 1px solid var(--border);
-    box-shadow: 0 4px 20px rgba(2, 32, 40, 0.15);
-    width: 100%;
-    max-width: 400px;
-    text-align: center;
-    margin: 60px auto;
-  }
-
-  .logo { font-size: 48px; margin-bottom: 16px; }
-
-  .login-box h1 {
-    font-size: 22px;
-    font-weight: 500;
-    margin-bottom: 8px;
-    color: var(--gray-900);
-  }
-
-  .login-box p, .subtitle {
-    color: var(--gray-700);
-    margin-bottom: 24px;
-    font-size: 13px;
-  }
-
-  .login-toggle {
-    display: flex; 
-    gap: 6px; 
-    background: var(--gray-200);
-    padding: 4px; 
-    border-radius: 8px; 
-    margin-bottom: 16px;
-    border: 1px solid var(--border);
-  }
-
-  .login-toggle button {
-    flex: 1; 
-    padding: 8px 12px; 
-    border: none; 
-    background: transparent;
-    color: var(--gray-700); 
-    font-weight: 500; 
-    cursor: pointer;
-    border-radius: 6px; 
-    font-size: 12px;
-    margin-top: 0;
-  }
-
-  .login-toggle button.login-btn-ativo { 
-    background: var(--primary-dark); 
-    color: #ffffff; 
-  }
-
-  select, input, textarea, button {
-    width: 100%;
-    padding: 10px 14px;
-    margin-top: 8px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    font-size: 13.5px;
-    font-family: inherit;
-    color: var(--gray-900);
-    transition: all 0.15s ease;
-  }
-
-  select:focus, input:focus, textarea:focus {
-    outline: none;
-    border-color: var(--primary-light);
-    box-shadow: 0 0 0 2px rgba(95, 222, 210, 0.2);
-  }
-
-  button {
-    background: var(--primary-dark);
-    color: #ffffff;
-    border: none;
-    border-radius: 8px;
-    font-size: 14px;
-    font-weight: 500;
-    cursor: pointer;
-    transition: all 0.15s ease;
-  }
-
+  select, input, textarea, button { width: 100%; padding: 10px 14px; margin-top: 8px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; font-size: 13.5px; color: var(--gray-900); }
+  button { background: var(--primary-dark); color: #fff; font-weight: 500; cursor: pointer; }
   button:hover { background: var(--primary); }
 
-  button:disabled {
-    background: var(--gray-200);
-    color: var(--gray-500);
-    cursor: not-allowed;
-    opacity: 0.7;
-  }
-
-  .erro, .error-msg {
-    margin-top: 16px;
-    padding: 12px;
-    background: rgba(179, 86, 78, 0.12);
-    color: var(--danger);
-    border: 1px solid rgba(179, 86, 78, 0.3);
-    border-radius: 8px;
-    font-size: 13px;
-  }
-
-  /* TOPBAR / TOPO */
-  .topbar, .topo {
-    background: var(--surface);
-    border-bottom: 1px solid var(--border);
-    padding: 14px 20px;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    box-shadow: 0 1px 3px rgba(2, 32, 40, 0.07);
-    border-radius: 12px;
-    margin-bottom: 20px;
-    flex-wrap: wrap;
-    gap: 12px;
-  }
-
-  .topbar-left { display: flex; align-items: center; gap: 12px; }
-  .logo-small { font-size: 24px; }
-  .topbar-left h1, .topo h1 { font-size: 18px; font-weight: 500; color: var(--gray-900); }
-
-  .topbar-right, .topo .acoes {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    flex-wrap: wrap;
-  }
-
-  .user-name { color: var(--gray-700); font-weight: 500; font-size: 13px; }
-
-  .btn-logout, .btn-sair {
-    padding: 6px 14px;
-    background: var(--gray-200);
-    color: var(--gray-900);
-    border: 1px solid var(--border);
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 500;
-    cursor: pointer;
-    width: auto;
-    margin-top: 0;
-  }
-
-  .btn-logout:hover, .btn-sair:hover { border-color: var(--primary); }
-
-  /* TOOLBAR / MENU SUSPENSO */
-  .toolbar, .menu-suspenso {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 20px;
-    flex-wrap: wrap;
-    background: var(--surface);
-    padding: 12px 16px;
-    border-radius: 10px;
-    border: 1px solid var(--border);
-    box-shadow: 0 1px 3px rgba(2, 32, 40, 0.07);
-  }
-
-  .label, .menu-suspenso label {
-    font-weight: 500;
-    color: var(--gray-700);
-    font-size: 13px;
-    white-space: nowrap;
-    margin: 0;
-  }
-
-  .select, .menu-suspenso select {
-    flex: 1;
-    min-width: 180px;
-    max-width: 400px;
-    padding: 8px 12px;
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    font-size: 13.5px;
-    background: var(--gray-50);
-    cursor: pointer;
-    margin: 0;
-  }
-
-  /* FILTROS */
-  .filters, .filtros { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
-  .filter-btn, .filtro {
-    padding: 6px 16px;
-    border-radius: 20px;
-    font-size: 12px;
-    font-weight: 500;
-    cursor: pointer;
-    background: var(--gray-200);
-    color: var(--gray-700);
-    transition: all 0.15s ease;
-    display: flex;
-    align-items: center;
-    gap: 6px;
-    user-select: none;
-    border: 1px solid var(--border);
-  }
-
-  .filter-btn:hover, .filtro:hover { border-color: var(--primary); color: var(--gray-900); }
-  .filter-btn[data-status="TODOS"], .filtro.ativo { background: var(--primary-light); color: #022028; border-color: var(--primary-light); font-weight: 500; }
+  .erro { margin-top: 16px; padding: 12px; background: rgba(179, 86, 78, 0.12); color: var(--danger); border-radius: 8px; font-size: 13px; }
+  .topo { background: var(--surface); border-bottom: 1px solid var(--border); padding: 14px 20px; display: flex; justify-content: space-between; border-radius: 12px; margin-bottom: 20px; }
+  .menu-suspenso { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; background: var(--surface); padding: 12px 16px; border-radius: 10px; border: 1px solid var(--border); }
   
-  .ordenacao { display: flex; justify-content: flex-end; margin-bottom: 16px; }
-  .ordenacao select { width: auto; max-width: 230px; margin-top: 0; padding: 6px 12px; font-size: 12px; }
+  .badge { display: inline-block; padding: 2px 9px; border-radius: 11px; font-size: 10.5px; font-weight: 500; }
+  .b-novo { background: rgba(168, 117, 42, 0.13); color: var(--warning); }
 
-  .secao-titulo {
-    font-size: 14px; 
-    font-weight: 500; 
-    color: var(--gray-900);
-    margin: 20px 0 10px; 
-    padding: 10px 14px; 
-    background: var(--surface);
-    border-left: 3px solid var(--primary-light); 
-    border-radius: 8px;
-    border: 1px solid var(--border);
-    border-left-width: 3px;
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center;
-  }
-  
-  .secao-titulo .contador {
-    background: var(--gray-200); 
-    color: var(--gray-700);
-    padding: 2px 8px;
-    border-radius: 12px; 
-    font-size: 11px;
-    font-weight: 500;
-  }
-
-  .badge {
-    display: inline-block;
-    padding: 2px 9px;
-    border-radius: 11px;
-    font-size: 10.5px;
-    font-weight: 500;
-    text-align: center;
-    white-space: nowrap;
-  }
-
-  .b-novo, .b-contato { background: rgba(168, 117, 42, 0.13); color: var(--warning); }
-  .b-negociacao { background: var(--gray-200); color: var(--primary); }
-  .b-convertido { background: rgba(47, 125, 106, 0.13); color: var(--success); }
-  .b-nao-interessado, .status-sem-resposta { background: rgba(179, 86, 78, 0.13); color: var(--danger); }
-  .b-sem-resposta { background: var(--gray-200); color: var(--gray-700); }
-  .b-retorno { background: rgba(142, 36, 170, 0.13); color: #8e24aa; }
-  .b-reuniao { background: rgba(0, 137, 123, 0.13); color: #00897b; }
-
-  /* CARDS */
-  .cards-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
-
-  .card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 16px;
-    box-shadow: 0 1px 3px rgba(2, 32, 40, 0.07);
-    transition: all 0.15s ease;
-    position: relative;
-    margin-bottom: 12px;
-  }
-
-  .card:hover { border-color: var(--gray-300); }
-
-  .card-header, .card .linha-topo {
-    display: flex;
-    justify-content: space-between;
-    align-items: flex-start;
-    margin-bottom: 12px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid var(--border);
-    flex-wrap: wrap;
-    gap: 8px;
-  }
-
-  .card-title, .card h2 { font-size: 15px; font-weight: 500; color: var(--gray-900); flex: 1; }
-  .card .info { font-size: 12.5px; color: var(--gray-700); margin-top: 6px; line-height: 1.5; }
-
-  .card-actions, .acoes-card {
-    display: flex;
-    gap: 8px;
-    padding-top: 12px;
-    border-top: 1px solid var(--border);
-    justify-content: flex-end;
-    flex-wrap: wrap;
-    margin-top: 12px;
-  }
-
-  .btn-editar, .btn-historico { padding: 6px 14px; font-size: 12px; width: auto; display: inline-block; }
-  .btn-editar { background: var(--primary-dark); }
-  .btn-historico { background: var(--primary); }
-
-  .loading, .hist-vazio, .vazio, .empty { text-align: center; padding: 30px 20px; color: var(--gray-700); font-size: 13px; }
-
-  /* MODAL */
-  .modal-fundo {
-    position: fixed; 
-    inset: 0; 
-    background: rgba(2, 32, 40, 0.5);
-    display: none; 
-    align-items: center; 
-    justify-content: center;
-    padding: 16px; 
-    z-index: 100;
-    backdrop-filter: blur(2px);
-  }
-
-  .modal {
-    background: var(--surface); 
-    border-radius: 12px; 
-    padding: 24px;
-    max-width: 560px; 
-    width: 100%; 
-    max-height: 90vh; 
-    overflow-y: auto;
-    border: 1px solid var(--border);
-    box-shadow: 0 10px 30px rgba(2, 32, 40, 0.2);
-  }
-
-  .modal h2 { font-size: 16px; font-weight: 500; margin-bottom: 14px; color: var(--gray-900); }
-  .modal label { font-size: 12px; font-weight: 500; display: block; margin-top: 12px; color: var(--gray-700); }
-  .modal .botoes { display: flex; gap: 10px; margin-top: 20px; }
-
-  .btn-cancelar { background: var(--gray-200); color: var(--gray-900); border: 1px solid var(--border); }
-  .btn-salvar, .btn-verde { background: var(--success); }
-  .btn-vermelho { background: var(--danger); }
-
-  .campo-conta-xp, .campo-reuniao {
-    display: none; 
-    margin-top: 16px; 
-    padding: 14px;
-    border-radius: 8px; 
-    background: var(--gray-50);
-    border: 1px solid var(--border);
-  }
-  .campo-conta-xp { border-left: 3px solid var(--success); }
-  .campo-reuniao { border-left: 3px solid var(--primary-light); }
-
-  .hist-item {
-    background: var(--gray-50); 
-    border-left: 3px solid var(--primary-light);
-    border: 1px solid var(--border);
-    border-left-width: 3px;
-    padding: 12px; 
-    margin-bottom: 10px; 
-    border-radius: 6px;
-  }
-  .hist-item .hist-data { font-size: 11px; color: var(--gray-700); margin-bottom: 4px; }
-  .hist-item .hist-status { font-size: 12.5px; font-weight: 500; color: var(--gray-900); margin-bottom: 4px; }
-  .hist-item .hist-obs { font-size: 12px; color: var(--gray-700); }
-
-  /* FILTROS BASE E TOTAIS BASE */
-  .filtros-base {
-    background: var(--surface); 
-    border-radius: 10px; 
-    padding: 14px;
-    box-shadow: 0 1px 3px rgba(2, 32, 40, 0.07); 
-    margin-bottom: 16px;
-    border: 1px solid var(--border);
-  }
-
-  .filtros-base-titulo {
-    font-size: 12px; 
-    font-weight: 500; 
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    color: var(--gray-700);
-    margin-bottom: 10px; 
-    display: flex; 
-    justify-content: space-between; 
-    align-items: center;
-  }
-
-  .filtros-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; }
-  .filtro-coluna { display: flex; flex-direction: column; gap: 4px; }
-  .filtro-coluna label { font-size: 10.5px; font-weight: 500; color: var(--gray-700); margin: 0; text-transform: uppercase; letter-spacing: 0.5px; }
-  .filtro-coluna select { width: 100%; margin: 0; padding: 6px 8px; font-size: 12px; }
-
-  .totais-base { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; margin-bottom: 16px; }
-
-  .total-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-left: 3px solid var(--primary-light);
-    border-radius: 8px; 
-    padding: 12px 14px;
-    box-shadow: 0 1px 3px rgba(2, 32, 40, 0.07);
-  }
-
-  .total-card .rotulo { font-size: 10.5px; color: var(--gray-700); text-transform: uppercase; font-weight: 500; letter-spacing: 0.5px; }
-  .total-card .valor { font-size: 20px; font-weight: 500; color: var(--gray-900); margin-top: 4px; }
-  .total-card .qtd { font-size: 11px; color: var(--gray-700); margin-top: 2px; }
-
-  .totais-destaque { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; margin-bottom: 20px; }
-
-  .destaque-card {
-    background: linear-gradient(160deg, #d3e0df 0%, #ffffff 100%);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 16px 18px;
-    color: var(--gray-900);
-    box-shadow: 0 1px 3px rgba(2, 32, 40, 0.07);
-    position: relative;
-  }
-
-  :root[data-theme="dark"] .destaque-card { background: linear-gradient(160deg, #1f4148 0%, #0a181c 100%); }
-
-  .destaque-card .destaque-rotulo { font-size: 10.5px; text-transform: uppercase; font-weight: 500; letter-spacing: 0.7px; color: var(--gray-700); margin-bottom: 4px; }
-  .destaque-card .destaque-valor { font-size: clamp(22px, 2.1vw, 28px); font-weight: 500; color: var(--primary-dark); line-height: 1.1; }
-  :root[data-theme="dark"] .destaque-card .destaque-valor { color: var(--primary-light); }
-
-  .destaque-card.destaque-pl { border-left: 3px solid var(--primary-light); }
-  .destaque-card.destaque-saldo { border-left: 3px solid var(--warning); }
-
-  /* TABELAS */
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px; margin-bottom: 12px; }
   .tabela-wrapper { overflow-x: auto; }
-
-  .tabela-base, .tabela {
-    width: 100%; 
-    border-collapse: collapse; 
-    background: var(--surface);
-    border-radius: 10px; 
-    overflow: hidden;
-    box-shadow: 0 1px 3px rgba(2, 32, 40, 0.07); 
-    font-size: 12.5px;
-    border: 1px solid var(--border);
-  }
-
-  .tabela-base th, .tabela th {
-    background: var(--gray-200); 
-    color: var(--gray-700); 
-    padding: 9px 11px;
-    text-align: left; 
-    font-weight: 500; 
-    white-space: nowrap;
-    text-transform: uppercase;
-    font-size: 10.5px;
-    letter-spacing: 0.5px;
-    border-bottom: 1px solid var(--border);
-  }
-
-  .tabela-base td, .tabela td {
-    padding: 9px 11px; 
-    border-bottom: 1px solid var(--border);
-    vertical-align: top; 
-    max-width: 250px; 
-    word-wrap: break-word;
-    color: var(--gray-700);
-    line-height: 1.5;
-  }
-
-  .tabela-base tr:hover td, .tabela tr:hover td { background: rgba(95, 222, 212, 0.08); }
-
-  /* SUB-TABS & STATS ADMIN */
-  .sub-tabs { display: flex; gap: 6px; margin: 0 0 16px; background: var(--gray-50); padding: 4px; border-radius: 8px; border: 1px solid var(--border); }
-  .sub-tab-btn { padding: 6px 12px; border: none; background: transparent; color: var(--gray-700); font-weight: 500; cursor: pointer; border-radius: 6px; font-size: 12px; width: auto; margin-top: 0; }
-  .sub-tab-btn.ativo { background: var(--surface); color: var(--gray-900); box-shadow: 0 1px 3px rgba(2, 32, 40, 0.07); }
-
-  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 20px; }
-  .stat-card { background: var(--surface); border-radius: 10px; padding: 14px 16px; text-align: left; box-shadow: 0 1px 3px rgba(2, 32, 40, 0.07); border: 1px solid var(--border); }
-  .stat-card .valor { font-size: 24px; font-weight: 500; color: var(--gray-900); }
-  .stat-card .rotulo { font-size: 10.5px; color: var(--gray-700); margin-top: 4px; font-weight: 500; text-transform: uppercase; }
-
-  .chart-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; margin-bottom: 20px; }
-  .chart-card { background: var(--surface); border-radius: 10px; padding: 16px; box-shadow: 0 1px 3px rgba(2, 32, 40, 0.07); border: 1px solid var(--border); }
-  .chart-card h3 { font-size: 13.5px; font-weight: 500; color: var(--gray-900); margin-bottom: 12px; }
-  .chart-box { position: relative; height: 260px; }
-
-  .admin-filtros { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; align-items: center; }
-  .admin-filtros select, .admin-filtros input { width: auto; margin-top: 0; padding: 6px 10px; font-size: 12px; }
-  .btn-pequeno { padding: 4px 10px; font-size: 11.5px; width: auto; margin-top: 0; }
-
-  .resultados-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; margin-bottom: 16px; }
-  .card-captacao { border-radius: 10px; padding: 16px; background: var(--surface); border: 1px solid var(--border); box-shadow: 0 1px 3px rgba(2, 32, 40, 0.07); border-left: 3px solid transparent; }
-  .card-captacao .capt-linha { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
-  .card-captacao .capt-rotulo { font-size: 10.5px; text-transform: uppercase; font-weight: 500; letter-spacing: 0.5px; color: var(--gray-700); }
-  .card-captacao .capt-valor { font-size: 22px; font-weight: 500; margin-top: 4px; color: var(--gray-900); }
-  .card-captacao .capt-info { font-size: 11.5px; margin-top: 2px; color: var(--gray-700); }
-
-  .farol-legenda { font-size: 11px; color: var(--gray-700); margin-bottom: 12px; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
-  .farol-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; }
-
-  @media (max-width: 768px) {
-    body { padding: 10px; }
-    .topbar, .topo { flex-direction: column; align-items: flex-start; }
-    .topbar-right, .topo .acoes { width: 100%; justify-content: space-between; }
-    .toolbar, .menu-suspenso { flex-direction: column; align-items: stretch; }
-    .filter-btn, .filtro { flex: 1; justify-content: center; min-width: 45%; }
-    .cards-container { grid-template-columns: 1fr; }
-  }
+  .tabela-base { width: 100%; border-collapse: collapse; background: var(--surface); border-radius: 10px; }
+  .tabela-base th, .tabela-base td { padding: 9px 11px; border-bottom: 1px solid var(--border); text-align: left; }
+  
+  .modal-fundo { position: fixed; inset: 0; background: rgba(2, 32, 40, 0.5); display: none; align-items: center; justify-content: center; padding: 16px; z-index: 100; }
+  .modal { background: var(--surface); border-radius: 12px; padding: 24px; max-width: 500px; width: 100%; }
   </style>
 </head>
 <body>
@@ -632,73 +85,11 @@
         <label for="menuAbas">📂 Navegar:</label>
         <select id="menuAbas" onchange="trocarAbaAssessor(this.value)">
           <option value="indicacoes">📋 Indicações Consultoria</option>
-          <option value="clientes">💼 Meus Clientes</option>
-          <option value="resultados">📊 Resultados mês atual</option>
-          <option value="historico">📊 Resultados Históricos</option>
         </select>
       </div>
 
-      <!-- ABA INDICAÇÕES -->
       <div id="conteudoIndicacoes">
-        <div style="display:flex;gap:8px;align-items:center;margin-bottom:16px;flex-wrap:wrap;">
-          <label for="filtroStatusAssessor" style="font-size:13px;font-weight:600;color:var(--azul);white-space:nowrap;margin:0;">🏷️ Status:</label>
-          <select id="filtroStatusAssessor" onchange="aoMudarFiltroStatus()" style="width:auto;min-width:220px;padding:8px 10px;font-size:13px;margin:0;"></select>
-        </div>
-        <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;">
-          <input type="text" id="buscaLeadAssessor" placeholder="🔍 Buscar por lead..." oninput="debouncedRenderizar()" style="width:auto;padding:8px 10px;font-size:13px;max-width:220px;margin-top:0;" />
-          <input type="text" id="buscaConsultorAssessor" placeholder="👤 Buscar por consultor..." oninput="debouncedRenderizar()" style="width:auto;padding:8px 10px;font-size:13px;max-width:220px;margin-top:0;" />
-        </div>
-        <div class="ordenacao">
-          <select id="ordemLista" onchange="renderizar()">
-            <option value="padrao">Ordenar: Novos primeiro</option>
-            <option value="nome-az">Nome (A → Z)</option>
-            <option value="nome-za">Nome (Z → A)</option>
-            <option value="recente">Mais recentes</option>
-            <option value="antigo">Mais antigos</option>
-          </select>
-        </div>
         <div id="lista"></div>
-      </div>
-
-      <!-- ABA MEUS CLIENTES -->
-      <div id="conteudoClientes" style="display:none;">
-        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:14px;">
-          <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
-            <input type="text" id="buscaBase" placeholder="🔍 Buscar em todos os campos..." oninput="debouncedRenderizarBase()" style="width:auto;padding:8px 10px;font-size:13px;max-width:300px;margin-top:0;" />
-          </div>
-        </div>
-        <div id="filtrosBaseContainer" class="filtros-base" style="display:none;">
-          <div class="filtros-base-titulo">
-            <span>🎯 Filtros avançados</span>
-            <button class="btn-pequeno" onclick="limparFiltrosBase()" style="background:#bdbdbd;">Limpar filtros</button>
-          </div>
-          <div class="filtros-grid" id="filtrosBaseGrid"></div>
-        </div>
-        <div id="totaisBaseContainer" class="totais-base"></div>
-        <div id="contadorBase" style="font-size:13px;color:#666;margin-bottom:10px;"></div>
-        <div class="tabela-wrapper"><div id="tabelaBase"></div></div>
-      </div>
-
-      <!-- ABA RESULTADOS -->
-      <div id="conteudoResultados" style="display:none;">
-        <div class="resultados-cards">
-          <div id="cardResultadoMes" class="card-captacao capt-neutro">
-            <div class="capt-linha">
-              <div>
-                <div class="capt-rotulo">💰 Captação</div>
-                <div id="valorResultadoMes" class="capt-valor">R$ 0,00</div>
-                <div id="infoResultadoMes" class="capt-info"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- ABA HISTÓRICO -->
-      <div id="conteudoHistorico" style="display:none;">
-        <div id="abaHistCaptacao" class="painel-aba">
-          <div class="tabela-wrapper"><div id="tabelaCaptacaoHist"></div></div>
-        </div>
       </div>
     </div>
 
@@ -711,51 +102,18 @@
           <button class="btn-sair" onclick="sair()" style="width: auto;">Sair</button>
         </div>
       </div>
-
-      <div class="menu-suspenso">
-        <label for="menuAbasAdmin">📂 Navegar:</label>
-        <select id="menuAbasAdmin" onchange="mudarAbaAdmin(this.value)">
-          <option value="indicacoes">📊 Indicações</option>
-          <option value="base">💼 Base Clientes</option>
-          <option value="resultados">📊 Resultados mês atual</option>
-          <option value="assessores">👥 Assessores</option>
-        </select>
-      </div>
-
-      <div id="abaIndicacoes">
-        <div class="sub-tabs">
-          <button id="btnSubDash" class="sub-tab-btn ativo" onclick="mudarSubAbaIndicacoes('dashboard')">📊 Dashboard</button>
-          <button id="btnSubLeads" class="sub-tab-btn" onclick="mudarSubAbaIndicacoes('leads')">📋 Leads</button>
-        </div>
-
-        <div id="subAbaDashboard">
-          <div class="stats-grid" id="statsGrid"></div>
-          <div class="chart-grid">
-            <div class="chart-card"><h3>📊 Leads por Status</h3><div class="chart-box"><canvas id="chartStatus"></canvas></div></div>
-          </div>
-        </div>
-
-        <div id="subAbaLeads" style="display:none;">
-          <div class="tabela-wrapper"><div id="tabelaLeadsAdmin"></div></div>
-        </div>
-      </div>
-
-      <div id="abaBase" style="display:none;">
-        <div class="tabela-wrapper"><div id="tabelaBaseAdmin"></div></div>
-      </div>
-
-      <div id="abaAssessores" style="display:none;">
-        <div class="tabela-wrapper"><div id="tabelaAssessores"></div></div>
+      <div id="conteudoAdmin">
+        <div class="tabela-wrapper"><div id="tabelaLeadsAdmin"></div></div>
       </div>
     </div>
   </div>
 
-  <!-- MODAIS -->
+  <!-- MODAL DE EDIÇÃO DO LEAD -->
   <div class="modal-fundo" id="modalFundo">
     <div class="modal">
       <h2 id="modalTitulo">Atualizar Atendimento</h2>
       <label>Status</label>
-      <select id="status">
+      <select id="modalStatus">
         <option value="Novo">Novo</option>
         <option value="Em contato">Em contato</option>
         <option value="Em negociação">Em negociação</option>
@@ -763,90 +121,48 @@
         <option value="Não interessado">Não interessado</option>
       </select>
       <label>Observações</label>
-      <textarea id="obs" rows="4"></textarea>
-      <div class="botoes">
-        <button class="btn-cancelar" onclick="fecharModal()">Cancelar</button>
-        <button class="btn-salvar" onclick="salvar()">Salvar</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="modal-fundo" id="modalHistoricoFundo">
-    <div class="modal">
-      <h2 id="histTitulo">Histórico do Cliente</h2>
-      <div id="histConteudo"></div>
-      <div class="botoes">
-        <button class="btn-cancelar" onclick="fecharModalHistorico()">Fechar</button>
+      <textarea id="modalObs" rows="4"></textarea>
+      <div style="display:flex; gap:10px; margin-top:16px;">
+        <button onclick="fecharModal()" style="background:var(--gray-200); color:var(--gray-900)">Cancelar</button>
+        <button onclick="salvarLead()">Salvar</button>
       </div>
     </div>
   </div>
 
   <script>
   // ═══════════════════════════════════════════════════════════
-  // CONEXÃO DE API VIA GOOGLE APPS SCRIPT
+  // ENDPOINT DA API DO GOOGLE APPS SCRIPT
   // ═══════════════════════════════════════════════════════════
   const API_URL = 'https://script.google.com/macros/s/AKfycbySwUmEYcsGE1b9Tom_2UpSZOYX6WRQ2f5z3snEm7t1IM2vi1SibS611wY71RCHlz5few/exec';
 
   async function chamarAPI(action, params = {}) {
     try {
+      if (!API_URL || API_URL.includes('COLE_AQUI')) {
+        alert('Erro: A URL da API precisa ser configurada.');
+        return { ok: false, msg: 'API_URL inválida.' };
+      }
+
       const url = new URL(API_URL);
       url.searchParams.append('action', action);
       Object.keys(params).forEach(k => {
         if (params[k] !== undefined && params[k] !== null) {
-          url.searchParams.append(k, typeof params[k] === 'object' ? JSON.stringify(params[k]) : params[k]);
+          url.searchParams.append(k, params[k]);
         }
       });
 
       const res = await fetch(url.toString(), { method: 'GET', redirect: 'follow' });
       return await res.json();
     } catch (err) {
-      console.error(`Erro ao chamar endpoint [${action}]:`, err);
+      console.error(`Erro na requisição [${action}]:`, err);
       return { ok: false, msg: err.message };
     }
   }
 
-  // DEBOUNCE PARA BUSCA
-  function debounce(fn, delay = 300) {
-    let timer;
-    return function (...args) {
-      clearTimeout(timer);
-      timer = setTimeout(() => fn.apply(this, args), delay);
-    };
-  }
-
-  const debouncedRenderizar = debounce(() => renderizar());
-  const debouncedRenderizarBase = debounce(() => renderizarBase());
-
-  // ESTADO GLOBAL DO SISTEMA
   let modoLogin = 'assessor';
   let vendedorLogado = '';
   let adminLogado = '';
-  let leads = [];
-  let todosLeadsAdmin = [];
-  let filtroAtual = 'Todos';
   let linhaEditando = null;
-  let dadosBase = { cabecalhos: [], dados: [], filtros: {} };
-  let dadosBaseAdmin = { cabecalhos: [], dados: [], filtros: {} };
-  let filtrosBaseAplicados = {};
-  let charts = {};
-
-  function safeStr(v) {
-    if (v === null || v === undefined) return '';
-    return String(v).trim();
-  }
-
-  function escapeHtml(t) {
-    if (!t) return '';
-    const div = document.createElement('div');
-    div.textContent = String(t);
-    return div.innerHTML;
-  }
-
-  function formatarMoedaBr(v) {
-    try {
-      return Number(v || 0).toLocaleString('pt-BR', { style: 'currency', currency: 'BRL' });
-    } catch (e) { return 'R$ 0,00'; }
-  }
+  let leadsCache = [];
 
   function setModoLogin(modo) {
     modoLogin = modo;
@@ -890,7 +206,7 @@
     document.getElementById('nomeLogado').textContent = nome;
     document.getElementById('login').style.display = 'none';
     document.getElementById('dashboard').style.display = 'block';
-    trocarAbaAssessor('indicacoes');
+    carregarLeads();
   }
 
   function abrirAdmin(nome) {
@@ -898,107 +214,42 @@
     document.getElementById('adminNome').textContent = 'Admin: ' + nome;
     document.getElementById('login').style.display = 'none';
     document.getElementById('adminPanel').style.display = 'block';
-    mudarAbaAdmin('indicacoes');
+    carregarLeadsAdmin();
   }
 
   function sair() {
     vendedorLogado = '';
     adminLogado = '';
-    leads = [];
     document.getElementById('dashboard').style.display = 'none';
     document.getElementById('adminPanel').style.display = 'none';
     document.getElementById('login').style.display = 'block';
   }
 
-  function trocarAbaAssessor(aba) {
-    document.getElementById('conteudoIndicacoes').style.display = (aba === 'indicacoes') ? 'block' : 'none';
-    document.getElementById('conteudoClientes').style.display = (aba === 'clientes') ? 'block' : 'none';
-    document.getElementById('conteudoResultados').style.display = (aba === 'resultados') ? 'block' : 'none';
-    document.getElementById('conteudoHistorico').style.display = (aba === 'historico') ? 'block' : 'none';
-
-    if (aba === 'indicacoes' && leads.length === 0) carregarLeads();
-    if (aba === 'clientes' && dadosBase.dados.length === 0) carregarBase();
-    if (aba === 'resultados') carregarResultadoMes();
-  }
-
-  function mudarAbaAdmin(aba) {
-    ['indicacoes', 'base', 'resultados', 'assessores'].forEach(a => {
-      const el = document.getElementById('aba' + a.charAt(0).toUpperCase() + a.slice(1));
-      if (el) el.style.display = (a === aba) ? 'block' : 'none';
-    });
-
-    if (aba === 'indicacoes' && todosLeadsAdmin.length === 0) carregarDadosAdmin();
-    if (aba === 'assessores') carregarAssessores();
-  }
-
-  function mudarSubAbaIndicacoes(sub) {
-    document.getElementById('subAbaDashboard').style.display = (sub === 'dashboard') ? 'block' : 'none';
-    document.getElementById('subAbaLeads').style.display = (sub === 'leads') ? 'block' : 'none';
-    document.getElementById('btnSubDash').classList.toggle('ativo', sub === 'dashboard');
-    document.getElementById('btnSubLeads').classList.toggle('ativo', sub === 'leads');
-  }
-
-  // CARREGAR LEADS DO ASSESSOR
   async function carregarLeads() {
-    const dados = await chamarAPI('getLeads', { assessor: vendedorLogado });
-    leads = Array.isArray(dados) ? dados : [];
-    montarFiltros();
-    renderizar();
-  }
-
-  function montarFiltros() {
-    const statusSet = ['Todos'];
-    leads.forEach(l => {
-      const s = safeStr(l.status);
-      if (s && !statusSet.includes(s)) statusSet.push(s);
-    });
-    const sel = document.getElementById('filtroStatusAssessor');
-    if (!sel) return;
-    sel.innerHTML = '';
-    statusSet.forEach(s => {
-      const opt = document.createElement('option');
-      opt.value = s; opt.textContent = s;
-      sel.appendChild(opt);
-    });
-  }
-
-  function aoMudarFiltroStatus() {
-    filtroAtual = document.getElementById('filtroStatusAssessor').value;
-    renderizar();
-  }
-
-  function classeBadge(status) {
-    const map = { 'Novo': 'b-novo', 'Convertido': 'b-convertido' };
-    return map[status] || 'b-novo';
-  }
-
-  function renderizar() {
     const lista = document.getElementById('lista');
-    let filtrados = filtroAtual === 'Todos' ? leads.slice() : leads.filter(l => l.status === filtroAtual);
-    const buscaLead = (document.getElementById('buscaLeadAssessor').value || '').trim().toLowerCase();
+    lista.innerHTML = '<div style="padding:20px;text-align:center;">Carregando indicações...</div>';
     
-    if (buscaLead) filtrados = filtrados.filter(l => safeStr(l.nomeLead).toLowerCase().includes(buscaLead));
-    
-    if (filtrados.length === 0) {
-      lista.innerHTML = '<div class="vazio">Nenhum lead encontrado.</div>';
+    const dados = await chamarAPI('getLeads', { assessor: vendedorLogado });
+    if (!Array.isArray(dados) || dados.length === 0) {
+      lista.innerHTML = '<div style="padding:20px;text-align:center;">Nenhum lead atribuído.</div>';
       return;
     }
 
-    let html = `<div class="secao-titulo"><span>📋 Indicações</span><span class="contador">${filtrados.length}</span></div>`;
-    filtrados.forEach(l => {
+    leadsCache = dados;
+    let html = '';
+    dados.forEach(l => {
       html += `
         <div class="card">
-          <div class="linha-topo">
-            <h2>${escapeHtml(l.nomeLead)}</h2>
-            <span class="badge ${classeBadge(l.status)}">${escapeHtml(l.status)}</span>
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <h3>${l.nomeLead}</h3>
+            <span class="badge b-novo">${l.status}</span>
           </div>
-          <div class="info">
-            📞 ${escapeHtml(l.celularLead)} | ✉️ ${escapeHtml(l.emailLead)}<br>
-            💰 Aporte: ${escapeHtml(l.aporte || '-')} | 💼 Consultor: ${escapeHtml(l.nomeConsultor || '-')}
-          </div>
-          <div class="acoes-card">
-            <button class="btn-historico" onclick="verHistorico('${escapeHtml(l.nomeLead)}')">📜 Histórico</button>
-            <button class="btn-editar" onclick="abrirModal(${l.row})">Atualizar</button>
+          <p style="margin-top:6px; font-size:13px; color:var(--gray-700)">
+            📞 ${l.celularLead} | ✉️ ${l.emailLead}<br>
+            💰 Aporte: ${l.aporte || '-'} | 💼 Consultor: ${l.nomeConsultor || '-'}
+          </p>
+          <div style="margin-top:10px; text-align:right;">
+            <button onclick="abrirModal(${l.row})" style="width:auto; padding:6px 12px; font-size:12px;">Atualizar</button>
           </div>
         </div>
       `;
@@ -1006,120 +257,31 @@
     lista.innerHTML = html;
   }
 
-  // BASE DE CLIENTES
-  async function carregarBase() {
-    const r = await chamarAPI('getLeadsBase', { assessor: vendedorLogado });
-    dadosBase = (r && Array.isArray(r.dados)) ? r : { cabecalhos: [], dados: [], filtros: {} };
-    renderizarBase();
-  }
-
-  function renderizarBase() {
-    const div = document.getElementById('tabelaBase');
-    if (!dadosBase.dados || dadosBase.dados.length === 0) {
-      div.innerHTML = '<div class="vazio">Nenhum cliente na base.</div>';
-      return;
-    }
-
-    let html = '<table class="tabela-base"><thead><tr>';
-    dadosBase.cabecalhos.forEach(c => html += `<th>${escapeHtml(c)}</th>`);
-    html += '</tr></thead><tbody>';
-
-    dadosBase.dados.forEach(item => {
-      html += '<tr>';
-      for (let c = 0; c < dadosBase.cabecalhos.length; c++) {
-        html += `<td>${escapeHtml(safeStr(item['col' + c]) || '-')}</td>`;
-      }
-      html += '</tr>';
-    });
-    html += '</tbody></table>';
-    div.innerHTML = html;
-  }
-
-  // RESULTADOS
-  async function carregarResultadoMes() {
-    const r = await chamarAPI('getResultadoMesAtual', { nomeAssessorLogado: vendedorLogado });
-    const valorEl = document.getElementById('valorResultadoMes');
-    const infoEl = document.getElementById('infoResultadoMes');
-
-    if (r && r.ok) {
-      valorEl.textContent = formatarMoedaBr(r.valor);
-      infoEl.textContent = `${r.nome} • ${r.qtd} registro(s)`;
-    } else {
-      valorEl.textContent = 'R$ 0,00';
-      infoEl.textContent = 'Sem dados de captação no mês.';
-    }
-  }
-
-  // PAINEL ADMIN
-  async function carregarDadosAdmin() {
+  async function carregarLeadsAdmin() {
+    const container = document.getElementById('tabelaLeadsAdmin');
+    container.innerHTML = '<div style="padding:20px;text-align:center;">Carregando painel admin...</div>';
+    
     const dados = await chamarAPI('getTodosLeads', { adminLogado });
-    todosLeadsAdmin = Array.isArray(dados) ? dados : [];
-    renderLeadsAdmin();
-    renderDashboardAdmin();
-  }
-
-  function renderLeadsAdmin() {
-    const div = document.getElementById('tabelaLeadsAdmin');
-    if (todosLeadsAdmin.length === 0) {
-      div.innerHTML = '<div class="vazio">Nenhum lead encontrado.</div>';
-      return;
-    }
-
-    let html = '<table class="tabela"><thead><tr><th>Lead</th><th>Assessor</th><th>Status</th><th>Consultor</th></tr></thead><tbody>';
-    todosLeadsAdmin.forEach(l => {
-      html += `<tr><td><b>${escapeHtml(l.nomeLead)}</b></td><td>${escapeHtml(l.assessor)}</td><td><span class="badge ${classeBadge(l.status)}">${escapeHtml(l.status)}</span></td><td>${escapeHtml(l.nomeConsultor || '-')}</td></tr>`;
-    });
-    html += '</tbody></table>';
-    div.innerHTML = html;
-  }
-
-  function renderDashboardAdmin() {
-    const statsGrid = document.getElementById('statsGrid');
-    statsGrid.innerHTML = `
-      <div class="stat-card"><div class="valor">${todosLeadsAdmin.length}</div><div class="rotulo">Total de Leads</div></div>
-    `;
-
-    const statusCounts = {};
-    todosLeadsAdmin.forEach(l => statusCounts[l.status] = (statusCounts[l.status] || 0) + 1);
-
-    if (charts.status) charts.status.destroy();
-    const ctx = document.getElementById('chartStatus');
-    if (ctx) {
-      charts.status = new Chart(ctx, {
-        type: 'doughnut',
-        data: {
-          labels: Object.keys(statusCounts),
-          datasets: [{ data: Object.values(statusCounts), backgroundColor: ['#f9a825', '#1e88e5', '#2e7d32'] }]
-        },
-        options: { responsive: true, maintainAspectRatio: false }
-      });
-    }
-  }
-
-  async function carregarAssessores() {
-    const dados = await chamarAPI('getAssessores');
-    const div = document.getElementById('tabelaAssessores');
     if (!Array.isArray(dados) || dados.length === 0) {
-      div.innerHTML = '<div class="vazio">Nenhum assessor cadastrado.</div>';
+      container.innerHTML = '<div style="padding:20px;text-align:center;">Nenhum lead cadastrado.</div>';
       return;
     }
 
-    let html = '<table class="tabela"><thead><tr><th>Login</th><th>Nome</th><th>Email</th></tr></thead><tbody>';
-    dados.forEach(a => {
-      html += `<tr><td>${escapeHtml(a.login)}</td><td>${escapeHtml(a.nome)}</td><td>${escapeHtml(a.email || '-')}</td></tr>`;
+    let html = '<table class="tabela-base"><thead><tr><th>Lead</th><th>Assessor</th><th>Status</th><th>Consultor</th></tr></thead><tbody>';
+    dados.forEach(l => {
+      html += `<tr><td><b>${l.nomeLead}</b></td><td>${l.assessor}</td><td>${l.status}</td><td>${l.nomeConsultor || '-'}</td></tr>`;
     });
     html += '</tbody></table>';
-    div.innerHTML = html;
+    container.innerHTML = html;
   }
 
-  // MODAL E HISTÓRICO
   function abrirModal(row) {
-    const l = leads.find(x => x.row === row);
-    if (!l) return;
+    const lead = leadsCache.find(x => x.row === row);
+    if (!lead) return;
     linhaEditando = row;
-    document.getElementById('modalTitulo').textContent = 'Atualizar: ' + l.nomeLead;
-    document.getElementById('status').value = l.status || 'Novo';
-    document.getElementById('obs').value = l.observacoes || '';
+    document.getElementById('modalTitulo').textContent = 'Atualizar: ' + lead.nomeLead;
+    document.getElementById('modalStatus').value = lead.status || 'Novo';
+    document.getElementById('modalObs').value = lead.observacoes || '';
     document.getElementById('modalFundo').style.display = 'flex';
   }
 
@@ -1128,50 +290,26 @@
     linhaEditando = null;
   }
 
-  async function salvar() {
-    const status = document.getElementById('status').value;
-    const obs = document.getElementById('obs').value;
-    const l = leads.find(x => x.row === linhaEditando);
+  async function salvarLead() {
+    const status = document.getElementById('modalStatus').value;
+    const obs = document.getElementById('modalObs').value;
+    const lead = leadsCache.find(x => x.row === linhaEditando);
 
-    const r = await chamarAPI('updateLead', {
-      row: linhaEditando, status, obs, vendedor: vendedorLogado,
-      statusAntigo: l ? l.status : '', cliente: l ? l.nomeLead : ''
+    const res = await chamarAPI('updateLead', {
+      row: linhaEditando,
+      status: status,
+      obs: obs,
+      vendedor: vendedorLogado,
+      statusAntigo: lead ? lead.status : '',
+      cliente: lead ? lead.nomeLead : ''
     });
 
-    if (r && r.ok) {
+    if (res && res.ok) {
       fecharModal();
       carregarLeads();
-    } else alert((r && r.msg) || 'Erro ao atualizar.');
-  }
-
-  async function verHistorico(nomeCliente) {
-    document.getElementById('histTitulo').textContent = 'Histórico: ' + nomeCliente;
-    document.getElementById('histConteudo').innerHTML = '<div class="hist-vazio">Carregando...</div>';
-    document.getElementById('modalHistoricoFundo').style.display = 'flex';
-
-    const h = await chamarAPI('getHistoricoCliente', { nomeCliente });
-    const div = document.getElementById('histConteudo');
-
-    if (!Array.isArray(h) || h.length === 0) {
-      div.innerHTML = '<div class="hist-vazio">Nenhuma atualização registrada.</div>';
-      return;
+    } else {
+      alert('Erro ao atualizar: ' + (res.msg || 'Falha na requisição'));
     }
-
-    let html = '';
-    h.forEach(item => {
-      html += `
-        <div class="hist-item">
-          <div class="hist-data">📅 ${escapeHtml(item.dataHora)} | 👤 ${escapeHtml(item.vendedor)}</div>
-          <div class="hist-status">${escapeHtml(item.statusAnterior)} → ${escapeHtml(item.statusNovo)}</div>
-          ${item.observacoes ? `<div class="hist-obs">${escapeHtml(item.observacoes)}</div>` : ''}
-        </div>
-      `;
-    });
-    div.innerHTML = html;
-  }
-
-  function fecharModalHistorico() {
-    document.getElementById('modalHistoricoFundo').style.display = 'none';
   }
 
   function alternarTema() {
