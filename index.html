@@ -4,249 +4,64 @@
   <base target="_top">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Clientes Novos Mesa Digital</title>
+  <title>CRMesa Digital - Gestão de Leads</title>
   <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
   <style>
-  /* ═══════════════════════════════════════════════════════════
-     ESTILOS CSS (antigo Estilos.html)
-     ═══════════════════════════════════════════════════════════ */
-  * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
 
   :root {
     color-scheme: light;
-    --primary: #3e6a6d;
-    --primary-dark: #022028;
-    --primary-light: #5fded4;
-    --success: #2f7d6a;
-    --warning: #a8752a;
-    --danger: #b3564e;
-    --gray-50: #ebf0f0;
-    --gray-100: #e2e8e8;
-    --gray-200: #d3e0df;
-    --gray-300: #afcecd;
-    --gray-500: #6d9899;
-    --gray-700: #3e6a6d;
-    --gray-900: #022028;
-    --surface: #ffffff;
-    --border: rgba(2, 32, 40, 0.14);
-    --azul: var(--primary);
-    --verde: var(--success);
-    --fundo: var(--gray-50);
-    --card: var(--surface);
-    --texto: var(--primary-dark);
-    --borda: var(--border);
+    --primary: #3e6a6d; --primary-dark: #022028; --primary-light: #5fded4;
+    --success: #2f7d6a; --warning: #a8752a; --danger: #b3564e;
+    --gray-50: #ebf0f0; --gray-100: #e2e8e8; --gray-200: #d3e0df;
+    --gray-300: #afcecd; --gray-500: #6d9899; --gray-700: #3e6a6d; --gray-900: #022028;
+    --surface: #ffffff; --border: rgba(2, 32, 40, 0.14);
   }
 
   :root[data-theme="dark"] {
     color-scheme: dark;
-    --primary: #5fded4;
-    --primary-dark: #1f4148;
-    --primary-light: #84afaf;
-    --success: #5fded4;
-    --warning: #e0d3a8;
-    --danger: #e8a09a;
-    --gray-50: #022028;
-    --gray-100: #0a181c;
-    --gray-200: #1f4148;
-    --gray-300: #3e6a6d;
-    --gray-500: #6d9899;
-    --gray-700: #84afaf;
-    --gray-900: #ffffff;
-    --surface: #0a181c;
-    --border: #1f4148;
+    --primary: #5fded4; --primary-dark: #1f4148; --primary-light: #84afaf;
+    --success: #5fded4; --warning: #e0d3a8; --danger: #e8a09a;
+    --gray-50: #022028; --gray-100: #0a181c; --gray-200: #1f4148;
+    --gray-300: #3e6a6d; --gray-500: #6d9899; --gray-700: #84afaf; --gray-900: #ffffff;
+    --surface: #0a181c; --border: #1f4148;
   }
 
-  body {
-    font-family: 'Public Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-    background: var(--gray-50);
-    color: var(--gray-900);
-    line-height: 1.5;
-    padding: 20px;
-    transition: background 0.18s ease, color 0.18s ease;
-  }
+  body { font-family: 'Public Sans', -apple-system, BlinkMacSystemFont, sans-serif; background: var(--gray-50); color: var(--gray-900); line-height: 1.5; padding: 20px; }
+  .container { max-width: 1180px; margin: 0 auto; }
 
-  .container { max-width: 1180px; margin: 0 auto; padding: 0; }
-  .screen { min-height: 100vh; }
+  .theme-btn { background: var(--gray-200); border: 1px solid var(--border); color: var(--gray-900); border-radius: 20px; padding: 6px 14px; font-size: 12px; cursor: pointer; }
+  .login-box { background: var(--surface); padding: 40px; border-radius: 12px; border: 1px solid var(--border); max-width: 400px; margin: 60px auto; text-align: center; }
+  .login-toggle { display: flex; gap: 6px; background: var(--gray-200); padding: 4px; border-radius: 8px; margin-bottom: 16px; }
+  .login-toggle button { flex: 1; padding: 8px; border: none; background: transparent; cursor: pointer; border-radius: 6px; }
+  .login-toggle button.login-btn-ativo { background: var(--primary-dark); color: #fff; }
 
-  .theme-btn {
-    background: var(--gray-200);
-    border: 1px solid var(--border);
-    color: var(--gray-900);
-    border-radius: 20px;
-    padding: 6px 14px;
-    font-size: 12px;
-    font-weight: 500;
-    cursor: pointer;
-    display: inline-flex;
-    align-items: center;
-    gap: 6px;
-    transition: all 0.15s ease;
-    white-space: nowrap;
-    width: auto;
-    margin-top: 0;
-  }
-  .theme-btn:hover { border-color: var(--primary); background: var(--surface); }
-
-  #loginScreen, .login-box-wrapper { display: flex; align-items: center; justify-content: center; min-height: 100vh; }
-  .login-box {
-    background: var(--surface);
-    padding: 40px;
-    border-radius: 12px;
-    border: 1px solid var(--border);
-    box-shadow: 0 4px 20px rgba(2, 32, 40, 0.15);
-    width: 100%;
-    max-width: 400px;
-    text-align: center;
-    margin: 60px auto;
-  }
-  .logo { font-size: 48px; margin-bottom: 16px; }
-  .login-box h1 { font-size: 22px; font-weight: 500; margin-bottom: 8px; color: var(--gray-900); }
-  .login-box p, .subtitle { color: var(--gray-700); margin-bottom: 24px; font-size: 13px; }
-  .login-toggle {
-    display: flex; gap: 6px; background: var(--gray-200); padding: 4px; border-radius: 8px; margin-bottom: 16px; border: 1px solid var(--border);
-  }
-  .login-toggle button {
-    flex: 1; padding: 8px 12px; border: none; background: transparent; color: var(--gray-700); font-weight: 500; cursor: pointer; border-radius: 6px; font-size: 12px; margin-top: 0;
-  }
-  .login-toggle button.login-btn-ativo { background: var(--primary-dark); color: #ffffff; }
-
-  select, input, textarea, button {
-    width: 100%; padding: 10px 14px; margin-top: 8px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; font-size: 13.5px; font-family: inherit; color: var(--gray-900); transition: all 0.15s ease;
-  }
-  select:focus, input:focus, textarea:focus { outline: none; border-color: var(--primary-light); box-shadow: 0 0 0 2px rgba(95, 222, 210, 0.2); }
-  button { background: var(--primary-dark); color: #ffffff; border: none; border-radius: 8px; font-size: 14px; font-weight: 500; cursor: pointer; transition: all 0.15s ease; }
+  select, input, textarea, button { width: 100%; padding: 10px 14px; margin-top: 8px; background: var(--surface); border: 1px solid var(--border); border-radius: 8px; font-size: 13.5px; color: var(--gray-900); }
+  button { background: var(--primary-dark); color: #fff; font-weight: 500; cursor: pointer; }
   button:hover { background: var(--primary); }
-  button:disabled { background: var(--gray-200); color: var(--gray-500); cursor: not-allowed; opacity: 0.7; }
 
-  .erro, .error-msg { margin-top: 16px; padding: 12px; background: rgba(179, 86, 78, 0.12); color: var(--danger); border: 1px solid rgba(179, 86, 78, 0.3); border-radius: 8px; font-size: 13px; }
-
-  .topbar, .topo {
-    background: var(--surface); border-bottom: 1px solid var(--border); padding: 14px 20px; display: flex; justify-content: space-between; align-items: center; box-shadow: 0 1px 3px rgba(2, 32, 40, 0.07); border-radius: 12px; margin-bottom: 20px; flex-wrap: wrap; gap: 12px;
-  }
-  .topbar-left { display: flex; align-items: center; gap: 12px; }
-  .logo-small { font-size: 24px; }
-  .topbar-left h1, .topo h1 { font-size: 18px; font-weight: 500; color: var(--gray-900); }
-  .topbar-right, .topo .acoes { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
-  .user-name { color: var(--gray-700); font-weight: 500; font-size: 13px; }
-  .btn-logout, .btn-sair { padding: 6px 14px; background: var(--gray-200); color: var(--gray-900); border: 1px solid var(--border); border-radius: 20px; font-size: 12px; font-weight: 500; cursor: pointer; width: auto; margin-top: 0; }
-  .btn-logout:hover, .btn-sair:hover { border-color: var(--primary); }
-
-  .toolbar, .menu-suspenso { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; background: var(--surface); padding: 12px 16px; border-radius: 10px; border: 1px solid var(--border); box-shadow: 0 1px 3px rgba(2, 32, 40, 0.07); }
-  .label, .menu-suspenso label { font-weight: 500; color: var(--gray-700); font-size: 13px; white-space: nowrap; margin: 0; }
-  .select, .menu-suspenso select { flex: 1; min-width: 180px; max-width: 400px; padding: 8px 12px; border: 1px solid var(--border); border-radius: 8px; font-size: 13.5px; background: var(--gray-50); cursor: pointer; margin: 0; }
-
-  .filters, .filtros { display: flex; gap: 8px; margin-bottom: 24px; flex-wrap: wrap; }
-  .filter-btn, .filtro { padding: 6px 16px; border-radius: 20px; font-size: 12px; font-weight: 500; cursor: pointer; background: var(--gray-200); color: var(--gray-700); transition: all 0.15s ease; display: flex; align-items: center; gap: 6px; user-select: none; border: 1px solid var(--border); }
-  .filter-btn:hover, .filtro:hover { border-color: var(--primary); color: var(--gray-900); }
-  .filter-btn[data-status="TODOS"], .filtro.ativo { background: var(--primary-light); color: #022028; border-color: var(--primary-light); font-weight: 500; }
-
-  .secao-titulo { font-size: 14px; font-weight: 500; color: var(--gray-900); margin: 20px 0 10px; padding: 10px 14px; background: var(--surface); border-left: 3px solid var(--primary-light); border-radius: 8px; border: 1px solid var(--border); border-left-width: 3px; display: flex; justify-content: space-between; align-items: center; }
-  .secao-titulo .contador { background: var(--gray-200); color: var(--gray-700); padding: 2px 8px; border-radius: 12px; font-size: 11px; font-weight: 500; }
-
-  .badge { display: inline-block; padding: 2px 9px; border-radius: 11px; font-size: 10.5px; font-weight: 500; text-align: center; white-space: nowrap; }
-  .b-novo, .b-contato { background: rgba(168, 117, 42, 0.13); color: var(--warning); }
-  .b-negociacao { background: var(--gray-200); color: var(--primary); }
+  .erro { margin-top: 16px; padding: 12px; background: rgba(179, 86, 78, 0.12); color: var(--danger); border-radius: 8px; font-size: 13px; }
+  .topo { background: var(--surface); border-bottom: 1px solid var(--border); padding: 14px 20px; display: flex; justify-content: space-between; border-radius: 12px; margin-bottom: 20px; }
+  .menu-suspenso { display: flex; align-items: center; gap: 12px; margin-bottom: 20px; background: var(--surface); padding: 12px 16px; border-radius: 10px; border: 1px solid var(--border); }
+  
+  .badge { display: inline-block; padding: 2px 9px; border-radius: 11px; font-size: 10.5px; font-weight: 500; }
+  .b-novo { background: rgba(168, 117, 42, 0.13); color: var(--warning); }
   .b-convertido { background: rgba(47, 125, 106, 0.13); color: var(--success); }
-  .b-nao-interessado, .status-sem-resposta { background: rgba(179, 86, 78, 0.13); color: var(--danger); }
-  .b-sem-resposta { background: var(--gray-200); color: var(--gray-700); }
-  .b-retorno { background: rgba(142, 36, 170, 0.13); color: #8e24aa; }
-  .b-reuniao { background: rgba(0, 137, 123, 0.13); color: #00897b; }
 
-  .cards-container { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
-  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px; box-shadow: 0 1px 3px rgba(2, 32, 40, 0.07); transition: all 0.15s ease; position: relative; margin-bottom: 12px; }
-  .card:hover { border-color: var(--gray-300); }
-  .card-header, .card .linha-topo { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid var(--border); flex-wrap: wrap; gap: 8px; }
-  .card-title, .card h2 { font-size: 15px; font-weight: 500; color: var(--gray-900); flex: 1; }
-  .card .info { font-size: 12.5px; color: var(--gray-700); margin-top: 6px; line-height: 1.5; }
-
-  .card-actions, .acoes-card { display: flex; gap: 8px; padding-top: 12px; border-top: 1px solid var(--border); justify-content: flex-end; flex-wrap: wrap; margin-top: 12px; }
-  .btn-editar, .btn-historico { padding: 6px 14px; font-size: 12px; width: auto; display: inline-block; }
-  .btn-editar { background: var(--primary-dark); }
-  .btn-historico { background: var(--primary); }
-
-  .loading, .hist-vazio, .vazio, .empty { text-align: center; padding: 30px 20px; color: var(--gray-700); font-size: 13px; }
-
-  .modal-fundo { position: fixed; inset: 0; background: rgba(2, 32, 40, 0.5); display: none; align-items: center; justify-content: center; padding: 16px; z-index: 100; backdrop-filter: blur(2px); }
-  .modal { background: var(--surface); border-radius: 12px; padding: 24px; max-width: 560px; width: 100%; max-height: 90vh; overflow-y: auto; border: 1px solid var(--border); box-shadow: 0 10px 30px rgba(2, 32, 40, 0.2); }
-  .modal h2 { font-size: 16px; font-weight: 500; margin-bottom: 14px; color: var(--gray-900); }
-  .modal label { font-size: 12px; font-weight: 500; display: block; margin-top: 12px; color: var(--gray-700); }
-  .modal .botoes { display: flex; gap: 10px; margin-top: 20px; }
-
-  .btn-cancelar { background: var(--gray-200); color: var(--gray-900); border: 1px solid var(--border); }
-  .btn-salvar, .btn-verde { background: var(--success); }
-  .btn-vermelho { background: var(--danger); }
-
-  .campo-conta-xp, .campo-reuniao { display: none; margin-top: 16px; padding: 14px; border-radius: 8px; background: var(--gray-50); border: 1px solid var(--border); }
-  .campo-conta-xp { border-left: 3px solid var(--success); }
-  .campo-reuniao { border-left: 3px solid var(--primary-light); }
-
-  .hist-item { background: var(--gray-50); border-left: 3px solid var(--primary-light); border: 1px solid var(--border); border-left-width: 3px; padding: 12px; margin-bottom: 10px; border-radius: 6px; }
-  .hist-item .hist-data { font-size: 11px; color: var(--gray-700); margin-bottom: 4px; }
-  .hist-item .hist-status { font-size: 12.5px; font-weight: 500; color: var(--gray-900); margin-bottom: 4px; }
-  .hist-item .hist-obs { font-size: 12px; color: var(--gray-700); }
-
-  .filtros-base { background: var(--surface); border-radius: 10px; padding: 14px; box-shadow: 0 1px 3px rgba(2, 32, 40, 0.07); margin-bottom: 16px; border: 1px solid var(--border); }
-  .filtros-base-titulo { font-size: 12px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; color: var(--gray-700); margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
-  .filtros-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; }
-  .filtro-coluna { display: flex; flex-direction: column; gap: 4px; }
-  .filtro-coluna label { font-size: 10.5px; font-weight: 500; color: var(--gray-700); margin: 0; text-transform: uppercase; letter-spacing: 0.5px; }
-  .filtro-coluna select { width: 100%; margin: 0; padding: 6px 8px; font-size: 12px; }
-
-  .totais-base { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; margin-bottom: 16px; }
-  .total-card { background: var(--surface); border: 1px solid var(--border); border-left: 3px solid var(--primary-light); border-radius: 8px; padding: 12px 14px; box-shadow: 0 1px 3px rgba(2, 32, 40, 0.07); }
-  .total-card .rotulo { font-size: 10.5px; color: var(--gray-700); text-transform: uppercase; font-weight: 500; letter-spacing: 0.5px; }
-  .total-card .valor { font-size: 20px; font-weight: 500; color: var(--gray-900); margin-top: 4px; }
-  .total-card .qtd { font-size: 11px; color: var(--gray-700); margin-top: 2px; }
-
-  .totais-destaque { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; margin-bottom: 20px; }
-  .destaque-card { background: linear-gradient(160deg, #d3e0df 0%, #ffffff 100%); border: 1px solid var(--border); border-radius: 12px; padding: 16px 18px; color: var(--gray-900); box-shadow: 0 1px 3px rgba(2, 32, 40, 0.07); position: relative; }
-  :root[data-theme="dark"] .destaque-card { background: linear-gradient(160deg, #1f4148 0%, #0a181c 100%); }
-  .destaque-card .destaque-rotulo { font-size: 10.5px; text-transform: uppercase; font-weight: 500; letter-spacing: 0.7px; color: var(--gray-700); margin-bottom: 4px; }
-  .destaque-card .destaque-valor { font-size: clamp(22px, 2.1vw, 28px); font-weight: 500; color: var(--primary-dark); line-height: 1.1; }
-  :root[data-theme="dark"] .destaque-card .destaque-valor { color: var(--primary-light); }
-
+  .card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px; margin-bottom: 12px; }
   .tabela-wrapper { overflow-x: auto; }
-  .tabela-base, .tabela { width: 100%; border-collapse: collapse; background: var(--surface); border-radius: 10px; overflow: hidden; box-shadow: 0 1px 3px rgba(2, 32, 40, 0.07); font-size: 12.5px; border: 1px solid var(--border); }
-  .tabela-base th, .tabela th { background: var(--gray-200); color: var(--gray-700); padding: 9px 11px; text-align: left; font-weight: 500; white-space: nowrap; text-transform: uppercase; font-size: 10.5px; letter-spacing: 0.5px; border-bottom: 1px solid var(--border); }
-  .tabela-base td, .tabela td { padding: 9px 11px; border-bottom: 1px solid var(--border); vertical-align: top; max-width: 250px; word-wrap: break-word; color: var(--gray-700); line-height: 1.5; }
-  .tabela-base tr:hover td, .tabela tr:hover td { background: rgba(95, 222, 212, 0.08); }
-
-  .sub-tabs { display: flex; gap: 6px; margin: 0 0 16px; background: var(--gray-50); padding: 4px; border-radius: 8px; border: 1px solid var(--border); }
-  .sub-tab-btn { padding: 6px 12px; border: none; background: transparent; color: var(--gray-700); font-weight: 500; cursor: pointer; border-radius: 6px; font-size: 12px; width: auto; margin-top: 0; }
-  .sub-tab-btn.ativo { background: var(--surface); color: var(--gray-900); box-shadow: 0 1px 3px rgba(2, 32, 40, 0.07); }
-
-  .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin-bottom: 20px; }
-  .stat-card { background: var(--surface); border-radius: 10px; padding: 14px 16px; text-align: left; box-shadow: 0 1px 3px rgba(2, 32, 40, 0.07); border: 1px solid var(--border); }
-  .stat-card .valor { font-size: 24px; font-weight: 500; color: var(--gray-900); }
-  .stat-card .rotulo { font-size: 10.5px; color: var(--gray-700); margin-top: 4px; font-weight: 500; text-transform: uppercase; }
-
-  .chart-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; margin-bottom: 20px; }
-  .chart-card { background: var(--surface); border-radius: 10px; padding: 16px; box-shadow: 0 1px 3px rgba(2, 32, 40, 0.07); border: 1px solid var(--border); }
-  .chart-box { position: relative; height: 260px; }
-
-  .resultados-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 12px; margin-bottom: 16px; }
-  .card-captacao { border-radius: 10px; padding: 16px; background: var(--surface); border: 1px solid var(--border); box-shadow: 0 1px 3px rgba(2, 32, 40, 0.07); border-left: 3px solid transparent; }
-  .card-captacao .capt-linha { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 8px; }
-
-  @media (max-width: 768px) {
-    body { padding: 10px; }
-    .topbar, .topo { flex-direction: column; align-items: flex-start; }
-    .topbar-right, .topo .acoes { width: 100%; justify-content: space-between; }
-    .toolbar, .menu-suspenso { flex-direction: column; align-items: stretch; }
-    .filter-btn, .filtro { flex: 1; justify-content: center; min-width: 45%; }
-    .cards-container { grid-template-columns: 1fr; }
-  }
+  .tabela-base { width: 100%; border-collapse: collapse; background: var(--surface); border-radius: 10px; }
+  .tabela-base th, .tabela-base td { padding: 9px 11px; border-bottom: 1px solid var(--border); text-align: left; }
+  
+  .modal-fundo { position: fixed; inset: 0; background: rgba(2, 32, 40, 0.5); display: none; align-items: center; justify-content: center; padding: 16px; z-index: 100; }
+  .modal { background: var(--surface); border-radius: 12px; padding: 24px; max-width: 500px; width: 100%; }
   </style>
 </head>
 <body>
   <div class="container">
-    <!-- LOGIN -->
+    <!-- TELA DE LOGIN -->
     <div id="login" class="login-box">
-      <h1>🔐 Clientes Novos Mesa Digital</h1>
+      <h1>🔐 CRMesa Digital</h1>
       <p>Faça login para acessar o sistema</p>
       <div class="login-toggle">
         <button id="btnModoAssessor" class="login-btn-ativo" onclick="setModoLogin('assessor')">Assessor</button>
@@ -254,7 +69,7 @@
       </div>
       <input type="text" id="txtUsuario" placeholder="Digite seu login" autocomplete="off">
       <input type="password" id="senha" placeholder="Senha">
-      <button onclick="fazerLogin()">Entrar</button>
+      <button id="btnEntrar" onclick="fazerLogin()">Entrar</button>
       <div id="erro" class="erro" style="display:none;">Usuário ou senha inválidos.</div>
     </div>
 
@@ -264,7 +79,7 @@
         <h1>👋 Olá, <span id="nomeLogado"></span></h1>
         <div class="acoes">
           <button type="button" class="theme-btn" id="tbtnAssessor" onclick="alternarTema()">Tema: claro</button>
-          <button class="btn-sair" onclick="sair()">Sair</button>
+          <button class="btn-sair" onclick="sair()" style="width: auto;">Sair</button>
         </div>
       </div>
 
@@ -273,126 +88,15 @@
         <select id="menuAbas" onchange="trocarAbaAssessor(this.value)">
           <option value="indicacoes">📋 Indicações Consultoria</option>
           <option value="clientes">💼 Meus Clientes</option>
-          <option value="resultados">📊 Resultados mês atual</option>
-          <option value="historico">📊 Resultados Históricos</option>
         </select>
       </div>
 
-      <!-- ABA INDICAÇÕES -->
       <div id="conteudoIndicacoes">
-        <div style="display:flex;gap:8px;align-items:center;margin-bottom:16px;flex-wrap:wrap;">
-          <label for="filtroStatusAssessor" style="font-size:13px;font-weight:600;color:var(--azul);white-space:nowrap;margin:0;">🏷️ Status:</label>
-          <select id="filtroStatusAssessor" onchange="aoMudarFiltroStatus()" style="width:auto;min-width:220px;padding:8px 10px;font-size:13px;margin:0;"></select>
-        </div>
-        <div style="display:flex;gap:8px;margin-bottom:16px;flex-wrap:wrap;">
-          <input type="text" id="buscaLeadAssessor" placeholder="🔍 Buscar por lead..." oninput="debouncedRenderizar()" style="width:auto;padding:8px 10px;font-size:13px;max-width:220px;margin-top:0;" />
-          <input type="text" id="buscaConsultorAssessor" placeholder="👤 Buscar por consultor..." oninput="debouncedRenderizar()" style="width:auto;padding:8px 10px;font-size:13px;max-width:220px;margin-top:0;" />
-        </div>
-        <div class="ordenacao">
-          <select id="ordemLista" onchange="renderizar()">
-            <option value="padrao">Ordenar: Novos primeiro</option>
-            <option value="nome-az">Nome (A → Z)</option>
-            <option value="nome-za">Nome (Z → A)</option>
-            <option value="recente">Mais recentes</option>
-            <option value="antigo">Mais antigos</option>
-          </select>
-        </div>
         <div id="lista"></div>
       </div>
 
-      <!-- ABA MEUS CLIENTES -->
       <div id="conteudoClientes" style="display:none;">
-        <div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;margin-bottom:14px;">
-          <div style="display:flex;gap:8px;flex-wrap:wrap;align-items:center;">
-            <input type="text" id="buscaBase" placeholder="🔍 Buscar em todos os campos..." oninput="debouncedRenderizarBase()" style="width:auto;padding:8px 10px;font-size:13px;max-width:300px;margin-top:0;" />
-            <select id="ordemBase" onchange="renderizarBase()" style="width:auto;padding:8px 10px;font-size:13px;margin-top:0;">
-              <option value="padrao">Ordenação padrão</option>
-              <option value="col1-az">Coluna B (A → Z)</option>
-              <option value="col1-za">Coluna B (Z → A)</option>
-            </select>
-          </div>
-        </div>
-
-        <div id="filtrosBaseContainer" class="filtros-base" style="display:none;">
-          <div class="filtros-base-titulo">
-            <span>🎯 Filtros avançados</span>
-            <button class="btn-pequeno" onclick="limparFiltrosBase()" style="background:#bdbdbd;">Limpar filtros</button>
-          </div>
-          <div class="filtros-grid" id="filtrosBaseGrid"></div>
-        </div>
-
-        <div id="totaisBaseContainer" class="totais-base"></div>
-        <div id="contadorBase" style="font-size:13px;color:#666;margin-bottom:10px;"></div>
         <div class="tabela-wrapper"><div id="tabelaBase"></div></div>
-      </div>
-
-      <!-- ABA RESULTADOS -->
-      <div id="conteudoResultados" style="display:none;">
-        <div class="resultados-cards">
-          <div id="cardResultadoMes" class="card-captacao capt-neutro">
-            <div class="capt-linha">
-              <div>
-                <div class="capt-rotulo">💰 Captação</div>
-                <div id="valorResultadoMes" class="capt-valor">R$ 0,00</div>
-                <div id="infoResultadoMes" class="capt-info"></div>
-              </div>
-              <div style="text-align:right;">
-                <div class="capt-meta-rotulo">Meta mensal</div>
-                <div class="capt-meta-valor">R$ 500.000,00</div>
-                <div id="pctResultadoMes" class="capt-pct">0,0% da meta</div>
-              </div>
-            </div>
-          </div>
-
-          <div id="cardResultadoReceita" class="card-captacao capt-receita">
-            <div class="capt-linha">
-              <div>
-                <div class="capt-rotulo">💰 Receita</div>
-                <div id="valorResultadoReceita" class="capt-valor">R$ 0,00</div>
-                <div id="infoResultadoReceita" class="capt-info"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="sub-tabs">
-          <button id="btnTabCaptacao" class="sub-tab-btn ativo" onclick="mostrarAbaResultados('captacao')">📋 Captação</button>
-          <button id="btnTabReceita" class="sub-tab-btn" onclick="mostrarAbaResultados('receita')">💰 Receita</button>
-        </div>
-
-        <div id="abaCaptacao" class="painel-aba" style="display:block;">
-          <div class="resultados-cards" style="margin-bottom:16px;">
-            <div class="card-captacao capt-verde-claro">
-              <div class="capt-rotulo">📥 Entradas</div>
-              <div id="valorEntradas" class="capt-valor">R$ 0,00</div>
-              <div id="infoEntradas" class="capt-info"></div>
-            </div>
-            <div class="card-captacao capt-vermelho">
-              <div class="capt-rotulo">📤 Saídas</div>
-              <div id="valorSaidas" class="capt-valor">R$ 0,00</div>
-              <div id="infoSaidas" class="capt-info"></div>
-            </div>
-            <div class="card-captacao capt-laranja">
-              <div class="capt-rotulo">🔄 Churn</div>
-              <div id="valorChurn" class="capt-valor">0,0%</div>
-              <div id="infoChurn" class="capt-info"></div>
-            </div>
-          </div>
-
-          <div style="background:var(--surface);border-radius:10px;padding:18px;border:1px solid var(--border);">
-            <h3 style="font-size:15px;color:var(--azul);margin-bottom:14px;">📋 Detalhamento da Captação</h3>
-            <div id="resumoGrafico" class="totais-base" style="margin-bottom:16px;"></div>
-            <div class="tabela-wrapper"><div id="tabelaCaptacao"></div></div>
-          </div>
-        </div>
-
-        <div id="abaReceita" class="painel-aba" style="display:none;">
-          <div style="background:var(--surface);border-radius:10px;padding:18px;border:1px solid var(--border);">
-            <h3 style="font-size:15px;color:var(--azul);margin-bottom:14px;">💰 Detalhamento da Receita</h3>
-            <div id="resumoReceita" class="totais-base" style="margin-bottom:16px;"></div>
-            <div class="tabela-wrapper"><div id="tabelaReceita"></div></div>
-          </div>
-        </div>
       </div>
     </div>
 
@@ -401,83 +105,81 @@
       <div class="topo">
         <h1>📊 Painel Administrativo</h1>
         <div class="acoes">
-          <span id="adminNome" style="font-size:13px;color:var(--gray-700);"></span>
-          <button type="button" class="theme-btn" id="tbtnAdmin" onclick="alternarTema()">Tema: claro</button>
-          <button class="btn-sair" onclick="sair()">Sair</button>
+          <span id="adminNome"></span>
+          <button class="btn-sair" onclick="sair()" style="width: auto;">Sair</button>
         </div>
       </div>
-
-      <div class="menu-suspenso">
-        <label for="menuAbasAdmin">📂 Navegar:</label>
-        <select id="menuAbasAdmin" onchange="mudarAbaAdmin(this.value)">
-          <option value="indicacoes">📊 Indicações</option>
-          <option value="base">💼 Base Clientes</option>
-          <option value="resultados">📊 Resultados mês atual</option>
-          <option value="historico">📊 Resultados Históricos</option>
-          <option value="assessores">👥 Assessores</option>
-        </select>
+      <div id="conteudoAdmin">
+        <div class="tabela-wrapper"><div id="tabelaLeadsAdmin"></div></div>
       </div>
+    </div>
+  </div>
 
-      <div id="abaIndicacoes">
-        <div class="sub-tabs">
-          <button id="btnSubDash" class="sub-tab-btn ativo" onclick="mudarSubAbaIndicacoes('dashboard')">📊 Dashboard</button>
-          <button id="btnSubLeads" class="sub-tab-btn" onclick="mudarSubAbaIndicacoes('leads')">📋 Leads</button>
-        </div>
-        <div id="subAbaDashboard">
-          <div class="stats-grid" id="statsGrid"></div>
-          <div class="chart-grid">
-            <div class="chart-card"><h3>📊 Leads por Status</h3><div class="chart-box"><canvas id="chartStatus"></canvas></div></div>
-          </div>
-        </div>
-        <div id="subAbaLeads" style="display:none;">
-          <div class="tabela-wrapper"><div id="tabelaLeads"></div></div>
-        </div>
+  <!-- MODAL DE EDIÇÃO DO LEAD -->
+  <div class="modal-fundo" id="modalFundo">
+    <div class="modal">
+      <h2 id="modalTitulo">Atualizar Atendimento</h2>
+      <label>Status</label>
+      <select id="modalStatus">
+        <option value="Novo">Novo</option>
+        <option value="Em contato">Em contato</option>
+        <option value="Em negociação">Em negociação</option>
+        <option value="Convertido">Convertido</option>
+        <option value="Não interessado">Não interessado</option>
+      </select>
+      <label>Observações</label>
+      <textarea id="modalObs" rows="4"></textarea>
+      <div style="display:flex; gap:10px; margin-top:16px;">
+        <button onclick="fecharModal()" style="background:var(--gray-200); color:var(--gray-900)">Cancelar</button>
+        <button onclick="salvarLead()">Salvar</button>
       </div>
     </div>
   </div>
 
   <script>
-  /* ═══════════════════════════════════════════════════════════
-     JAVASCRIPT DE CONTROLE (antigo Scripts.html)
-     ═══════════════════════════════════════════════════════════ */
-  function alternarTema() {
-    const html = document.documentElement;
-    const temaAtual = html.getAttribute('data-theme') || 'light';
-    const novoTema = temaAtual === 'dark' ? 'light' : 'dark';
-    html.setAttribute('data-theme', novoTema);
-    localStorage.setItem('w1theme', novoTema);
-    atualizarTextoBotoesTema(novoTema);
+  // ═══════════════════════════════════════════════════════════
+  // ENDPOINT DO GOOGLE APPS SCRIPT (SUBSTITUA PELA SUA URL DO GOOGLE)
+  // ═══════════════════════════════════════════════════════════
+  const API_URL = 'COLE_AQUI_A_URL_PUBLICADA_DO_GOOGLESCRIPT';
+
+  async function apiGet(action, params = {}) {
+    try {
+      const url = new URL(API_URL);
+      url.searchParams.append('action', action);
+      Object.keys(params).forEach(k => url.searchParams.append(k, params[k]));
+      
+      const res = await fetch(url.toString(), { method: 'GET', redirect: 'follow' });
+      return await res.json();
+    } catch (err) {
+      console.error(`Erro na requisição GET [${action}]:`, err);
+      return { ok: false, msg: err.message };
+    }
   }
 
-  function atualizarTextoBotoesTema(tema) {
-    const txt = tema === 'dark' ? 'Tema: escuro' : 'Tema: claro';
-    const btnAssessor = document.getElementById('tbtnAssessor');
-    const btnAdmin = document.getElementById('tbtnAdmin');
-    if (btnAssessor) btnAssessor.textContent = txt;
-    if (btnAdmin) btnAdmin.textContent = txt;
+  async function apiPost(action, body = {}) {
+    try {
+      body.action = action;
+      const res = await fetch(API_URL, {
+        method: 'POST',
+        redirect: 'follow',
+        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
+        body: JSON.stringify(body)
+      });
+      return await res.json();
+    } catch (err) {
+      console.error(`Erro na requisição POST [${action}]:`, err);
+      return { ok: false, msg: err.message };
+    }
   }
 
-  document.addEventListener('DOMContentLoaded', () => {
-    const temaSalvo = localStorage.getItem('w1theme') || 'light';
-    document.documentElement.setAttribute('data-theme', temaSalvo);
-    atualizarTextoBotoesTema(temaSalvo);
-  });
-
-  function debounce(fn, delay = 300) {
-    let timer;
-    return function (...args) {
-      clearTimeout(timer);
-      timer = setTimeout(() => fn.apply(this, args), delay);
-    };
-  }
-
-  const debouncedRenderizar = debounce(() => renderizar());
-  const debouncedRenderizarBase = debounce(() => renderizarBase());
-
+  // ═══════════════════════════════════════════════════════════
+  // LÓGICA DO FRONT-END PARA O GITHUB PAGES
+  // ═══════════════════════════════════════════════════════════
   let modoLogin = 'assessor';
   let vendedorLogado = '';
   let adminLogado = '';
-  let leads = [];
+  let linhaEditando = null;
+  let leadsCache = [];
 
   function setModoLogin(modo) {
     modoLogin = modo;
@@ -485,23 +187,34 @@
     document.getElementById('btnModoAdmin').className = modo === 'admin' ? 'login-btn-ativo' : '';
   }
 
-  function fazerLogin() {
-    const login = document.getElementById('txtUsuario').value.trim();
+  async function fazerLogin() {
+    const usuario = document.getElementById('txtUsuario').value.trim();
     const senha = document.getElementById('senha').value;
-    
-    // NOTA: Se publicado como Web App/API, altere este trecho para enviar uma requisição `fetch`
-    if (typeof google !== 'undefined' && google.script && google.script.run) {
-      const fn = modoLogin === 'admin' ? 'loginAdmin' : 'login';
-      google.script.run.withSuccessHandler(r => {
-        if (r && r.ok) {
-          if (modoLogin === 'admin') abrirAdmin(r.nome);
-          else abrirAssessor(r.nome);
-        } else {
-          document.getElementById('erro').style.display = 'block';
-        }
-      })[fn](login, senha);
+    const erroDiv = document.getElementById('erro');
+    const btn = document.getElementById('btnEntrar');
+
+    if (!usuario || !senha) {
+      erroDiv.textContent = 'Preencha login e senha.';
+      erroDiv.style.display = 'block';
+      return;
+    }
+
+    btn.disabled = true;
+    btn.textContent = 'Entrando...';
+
+    const action = modoLogin === 'admin' ? 'loginAdmin' : 'login';
+    const res = await apiPost(action, { usuario, senha });
+
+    btn.disabled = false;
+    btn.textContent = 'Entrar';
+
+    if (res && res.ok) {
+      erroDiv.style.display = 'none';
+      if (modoLogin === 'admin') abrirAdmin(res.nome);
+      else abrirAssessor(res.nome);
     } else {
-      alert("Aviso: Chamada 'google.script.run' só funciona dentro do ambiente Google Apps Script. Para usar no GitHub, configure uma API externa.");
+      erroDiv.textContent = 'Usuário ou senha inválidos.';
+      erroDiv.style.display = 'block';
     }
   }
 
@@ -510,6 +223,7 @@
     document.getElementById('nomeLogado').textContent = nome;
     document.getElementById('login').style.display = 'none';
     document.getElementById('dashboard').style.display = 'block';
+    carregarLeads();
   }
 
   function abrirAdmin(nome) {
@@ -517,12 +231,113 @@
     document.getElementById('adminNome').textContent = 'Admin: ' + nome;
     document.getElementById('login').style.display = 'none';
     document.getElementById('adminPanel').style.display = 'block';
+    carregarLeadsAdmin();
   }
 
   function sair() {
+    vendedorLogado = '';
+    adminLogado = '';
     document.getElementById('dashboard').style.display = 'none';
     document.getElementById('adminPanel').style.display = 'none';
     document.getElementById('login').style.display = 'block';
+  }
+
+  async function carregarLeads() {
+    const lista = document.getElementById('lista');
+    lista.innerHTML = '<div style="padding:20px;text-align:center;">Carregando indicações...</div>';
+    
+    const dados = await apiGet('getLeads', { assessor: vendedorLogado });
+    if (!Array.isArray(dados) || dados.length === 0) {
+      lista.innerHTML = '<div style="padding:20px;text-align:center;">Nenhum lead atribuído.</div>';
+      return;
+    }
+
+    leadsCache = dados;
+    let html = '';
+    dados.forEach(l => {
+      html += `
+        <div class="card">
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <h3>${l.nomeLead}</h3>
+            <span class="badge b-novo">${l.status}</span>
+          </div>
+          <p style="margin-top:6px; font-size:13px; color:var(--gray-700)">
+            📞 ${l.celularLead} | ✉️ ${l.emailLead}<br>
+            💰 Aporte: ${l.aporte || '-'} | 💼 Consultor: ${l.nomeConsultor || '-'}
+          </p>
+          <div style="margin-top:10px; text-align:right;">
+            <button onclick="abrirModal(${l.row})" style="width:auto; padding:6px 12px; font-size:12px;">Atualizar</button>
+          </div>
+        </div>
+      `;
+    });
+    lista.innerHTML = html;
+  }
+
+  async function carregarLeadsAdmin() {
+    const container = document.getElementById('tabelaLeadsAdmin');
+    container.innerHTML = '<div style="padding:20px;text-align:center;">Carregando painel admin...</div>';
+    
+    const dados = await apiGet('getTodosLeads', { adminLogado });
+    if (!Array.isArray(dados) || dados.length === 0) {
+      container.innerHTML = '<div style="padding:20px;text-align:center;">Nenhum lead cadastrado.</div>';
+      return;
+    }
+
+    let html = '<table class="tabela-base"><thead><tr><th>Lead</th><th>Assessor</th><th>Status</th><th>Consultor</th></tr></thead><tbody>';
+    dados.forEach(l => {
+      html += `<tr><td><b>${l.nomeLead}</b></td><td>${l.assessor}</td><td>${l.status}</td><td>${l.nomeConsultor || '-'}</td></tr>`;
+    });
+    html += '</tbody></table>';
+    container.innerHTML = html;
+  }
+
+  function abrirModal(row) {
+    const lead = leadsCache.find(x => x.row === row);
+    if (!lead) return;
+    linhaEditando = row;
+    document.getElementById('modalTitulo').textContent = 'Atualizar: ' + lead.nomeLead;
+    document.getElementById('modalStatus').value = lead.status || 'Novo';
+    document.getElementById('modalObs').value = lead.observacoes || '';
+    document.getElementById('modalFundo').style.display = 'flex';
+  }
+
+  function fecharModal() {
+    document.getElementById('modalFundo').style.display = 'none';
+    linhaEditando = null;
+  }
+
+  async function salvarLead() {
+    const status = document.getElementById('modalStatus').value;
+    const obs = document.getElementById('modalObs').value;
+    const lead = leadsCache.find(x => x.row === linhaEditando);
+
+    const res = await apiPost('updateLead', {
+      row: linhaEditando,
+      status: status,
+      obs: obs,
+      vendedor: vendedorLogado,
+      statusAntigo: lead ? lead.status : '',
+      cliente: lead ? lead.nomeLead : ''
+    });
+
+    if (res && res.ok) {
+      fecharModal();
+      carregarLeads();
+    } else {
+      alert('Erro ao atualizar: ' + (res.msg || 'Falha na requisição'));
+    }
+  }
+
+  function trocarAbaAssessor(aba) {
+    document.getElementById('conteudoIndicacoes').style.display = (aba === 'indicacoes') ? 'block' : 'none';
+    document.getElementById('conteudoClientes').style.display = (aba === 'clientes') ? 'block' : 'none';
+  }
+
+  function alternarTema() {
+    const html = document.documentElement;
+    const tema = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    html.setAttribute('data-theme', tema);
   }
   </script>
 </body>
