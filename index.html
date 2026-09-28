@@ -4,8 +4,7 @@
   <base target="_top">
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CRMesa Digital - Gestão de Leads</title>
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+  <title>CRMesa Digital</title>
   <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -46,7 +45,6 @@
   
   .badge { display: inline-block; padding: 2px 9px; border-radius: 11px; font-size: 10.5px; font-weight: 500; }
   .b-novo { background: rgba(168, 117, 42, 0.13); color: var(--warning); }
-  .b-convertido { background: rgba(47, 125, 106, 0.13); color: var(--success); }
 
   .card { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 16px; margin-bottom: 12px; }
   .tabela-wrapper { overflow-x: auto; }
@@ -87,16 +85,11 @@
         <label for="menuAbas">📂 Navegar:</label>
         <select id="menuAbas" onchange="trocarAbaAssessor(this.value)">
           <option value="indicacoes">📋 Indicações Consultoria</option>
-          <option value="clientes">💼 Meus Clientes</option>
         </select>
       </div>
 
       <div id="conteudoIndicacoes">
         <div id="lista"></div>
-      </div>
-
-      <div id="conteudoClientes" style="display:none;">
-        <div class="tabela-wrapper"><div id="tabelaBase"></div></div>
       </div>
     </div>
 
@@ -138,43 +131,33 @@
 
   <script>
   // ═══════════════════════════════════════════════════════════
-  // ENDPOINT DO GOOGLE APPS SCRIPT (SUBSTITUA PELA SUA URL DO GOOGLE)
+  // ENDPOINT DA API DO GOOGLE APPS SCRIPT
   // ═══════════════════════════════════════════════════════════
-  const API_URL = 'COLE_AQUI_A_URL_PUBLICADA_DO_GOOGLESCRIPT';
+  const API_URL = 'https://script.google.com/macros/s/AKfycbySwUmEYcsGE1b9Tom_2UpSZOYX6WRQ2f5z3snEm7t1IM2vi1SibS611wY71RCHlz5few/exec';
 
-  async function apiGet(action, params = {}) {
+  async function chamarAPI(action, params = {}) {
     try {
+      if (!API_URL || API_URL.includes('COLE_AQUI')) {
+        alert('Erro: A URL da API precisa ser configurada.');
+        return { ok: false, msg: 'API_URL inválida.' };
+      }
+
       const url = new URL(API_URL);
       url.searchParams.append('action', action);
-      Object.keys(params).forEach(k => url.searchParams.append(k, params[k]));
-      
+      Object.keys(params).forEach(k => {
+        if (params[k] !== undefined && params[k] !== null) {
+          url.searchParams.append(k, params[k]);
+        }
+      });
+
       const res = await fetch(url.toString(), { method: 'GET', redirect: 'follow' });
       return await res.json();
     } catch (err) {
-      console.error(`Erro na requisição GET [${action}]:`, err);
+      console.error(`Erro na requisição [${action}]:`, err);
       return { ok: false, msg: err.message };
     }
   }
 
-  async function apiPost(action, body = {}) {
-    try {
-      body.action = action;
-      const res = await fetch(API_URL, {
-        method: 'POST',
-        redirect: 'follow',
-        headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-        body: JSON.stringify(body)
-      });
-      return await res.json();
-    } catch (err) {
-      console.error(`Erro na requisição POST [${action}]:`, err);
-      return { ok: false, msg: err.message };
-    }
-  }
-
-  // ═══════════════════════════════════════════════════════════
-  // LÓGICA DO FRONT-END PARA O GITHUB PAGES
-  // ═══════════════════════════════════════════════════════════
   let modoLogin = 'assessor';
   let vendedorLogado = '';
   let adminLogado = '';
@@ -203,7 +186,7 @@
     btn.textContent = 'Entrando...';
 
     const action = modoLogin === 'admin' ? 'loginAdmin' : 'login';
-    const res = await apiPost(action, { usuario, senha });
+    const res = await chamarAPI(action, { usuario, senha });
 
     btn.disabled = false;
     btn.textContent = 'Entrar';
@@ -213,7 +196,7 @@
       if (modoLogin === 'admin') abrirAdmin(res.nome);
       else abrirAssessor(res.nome);
     } else {
-      erroDiv.textContent = 'Usuário ou senha inválidos.';
+      erroDiv.textContent = res.msg || 'Usuário ou senha inválidos.';
       erroDiv.style.display = 'block';
     }
   }
@@ -246,7 +229,7 @@
     const lista = document.getElementById('lista');
     lista.innerHTML = '<div style="padding:20px;text-align:center;">Carregando indicações...</div>';
     
-    const dados = await apiGet('getLeads', { assessor: vendedorLogado });
+    const dados = await chamarAPI('getLeads', { assessor: vendedorLogado });
     if (!Array.isArray(dados) || dados.length === 0) {
       lista.innerHTML = '<div style="padding:20px;text-align:center;">Nenhum lead atribuído.</div>';
       return;
@@ -278,7 +261,7 @@
     const container = document.getElementById('tabelaLeadsAdmin');
     container.innerHTML = '<div style="padding:20px;text-align:center;">Carregando painel admin...</div>';
     
-    const dados = await apiGet('getTodosLeads', { adminLogado });
+    const dados = await chamarAPI('getTodosLeads', { adminLogado });
     if (!Array.isArray(dados) || dados.length === 0) {
       container.innerHTML = '<div style="padding:20px;text-align:center;">Nenhum lead cadastrado.</div>';
       return;
@@ -312,7 +295,7 @@
     const obs = document.getElementById('modalObs').value;
     const lead = leadsCache.find(x => x.row === linhaEditando);
 
-    const res = await apiPost('updateLead', {
+    const res = await chamarAPI('updateLead', {
       row: linhaEditando,
       status: status,
       obs: obs,
@@ -327,11 +310,6 @@
     } else {
       alert('Erro ao atualizar: ' + (res.msg || 'Falha na requisição'));
     }
-  }
-
-  function trocarAbaAssessor(aba) {
-    document.getElementById('conteudoIndicacoes').style.display = (aba === 'indicacoes') ? 'block' : 'none';
-    document.getElementById('conteudoClientes').style.display = (aba === 'clientes') ? 'block' : 'none';
   }
 
   function alternarTema() {
